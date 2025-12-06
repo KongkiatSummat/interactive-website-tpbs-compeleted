@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="th">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,286 +13,8 @@
 
     <script src="https://unpkg.com/lucide@latest"></script>
 
-    <style>
-        :root {
-            --bg-color: #181009;
-            --gold-color: #cfa166;
-            --text-color: #e8d5b5;
-            --card-bg: rgba(42, 27, 18, 0.8);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            font-family: 'Sarabun', sans-serif;
-            overflow-x: hidden;
-        }
-
-        h1,
-        h2,
-        h3 {
-            font-family: 'Playfair Display', serif;
-        }
-
-        /* --- Background Effects --- */
-        .texture-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url("https://www.transparenttextures.com/patterns/aged-paper.png");
-            opacity: 0.07;
-            pointer-events: none;
-            z-index: 1;
-            mix-blend-mode: overlay;
-        }
-
-        .parallax-container {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-            z-index: 0;
-            overflow: hidden;
-        }
-
-        .ingredient {
-            position: absolute;
-            opacity: 0.6;
-            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
-        }
-
-        /* --- Header --- */
-        header {
-            height: 100vh;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
-            position: relative;
-            z-index: 10;
-        }
-
-        .header-content {
-            opacity: 0;
-            /* เริ่มต้นซ่อนไว้เพื่อรอ Animate */
-            transform: translateY(30px);
-        }
-
-        .main-title {
-            font-size: 4rem;
-            color: var(--gold-color);
-            font-weight: bold;
-            text-transform: uppercase;
-            letter-spacing: -2px;
-            margin-bottom: 1rem;
-            text-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
-        }
-
-        .subtitle {
-            font-size: 1.5rem;
-            font-style: italic;
-            border-top: 1px solid rgba(207, 161, 102, 0.3);
-            border-bottom: 1px solid rgba(207, 161, 102, 0.3);
-            padding: 1rem 2rem;
-            display: inline-block;
-        }
-
-        .scroll-indicator {
-            position: absolute;
-            bottom: 3rem;
-            color: var(--gold-color);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            font-size: 0.8rem;
-            letter-spacing: 0.2rem;
-            animation: bounce 2s infinite;
-        }
-
-        .scroll-line {
-            width: 1px;
-            height: 80px;
-            background: linear-gradient(to bottom, var(--gold-color), transparent);
-            margin-top: 10px;
-        }
-
-        @keyframes bounce {
-
-            0%,
-            100% {
-                transform: translateY(0);
-            }
-
-            50% {
-                transform: translateY(10px);
-            }
-        }
-
-        /* --- Timeline Section --- */
-        .timeline-container {
-            position: relative;
-            padding-bottom: 100px;
-            max-width: 1200px;
-            margin: 0 auto;
-            z-index: 10;
-        }
-
-        /* The Golden Line */
-        .golden-line {
-            position: absolute;
-            left: 50%;
-            top: 0;
-            bottom: 0;
-            width: 2px;
-            background: var(--gold-color);
-            transform: translateX(-50%) scaleY(0);
-            /* เริ่มที่ 0 */
-            transform-origin: top;
-            box-shadow: 0 0 15px var(--gold-color);
-            z-index: 0;
-        }
-
-        /* Card Styles */
-        .card {
-            display: flex;
-            align-items: center;
-            gap: 3rem;
-            margin: 150px 20px;
-            opacity: 0;
-            /* ซ่อนไว้รอ Animate */
-            transform: translateY(50px);
-        }
-
-        .card:nth-child(even) {
-            flex-direction: row;
-        }
-
-        .card:nth-child(odd) {
-            flex-direction: row-reverse;
-        }
-
-        .card-image-wrapper {
-            flex: 1;
-            position: relative;
-        }
-
-        .card-image {
-            width: 100%;
-            height: 350px;
-            object-fit: cover;
-            border-radius: 8px;
-            border: 3px solid rgba(207, 161, 102, 0.5);
-            filter: sepia(0.4);
-            transition: all 0.5s ease;
-        }
-
-        .card-image:hover {
-            filter: sepia(0);
-            transform: scale(1.02);
-        }
-
-        .flag-badge {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 2.5rem;
-            background: rgba(0, 0, 0, 0.6);
-            backdrop-filter: blur(5px);
-            border-radius: 5px;
-            padding: 5px;
-            border: 1px solid rgba(207, 161, 102, 0.5);
-        }
-
-        .card-content {
-            flex: 1;
-        }
-
-        .year-text {
-            font-size: 4rem;
-            font-weight: bold;
-            color: var(--gold-color);
-            opacity: 0.15;
-            position: absolute;
-            transform: translate(-20px, -40px);
-            z-index: -1;
-            font-family: 'Playfair Display', serif;
-        }
-
-        .location-tag {
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            color: var(--gold-color);
-            font-weight: bold;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            margin-bottom: 0.5rem;
-        }
-
-        .card-title {
-            font-size: 2.5rem;
-            color: #fff8e7;
-            margin-bottom: 1rem;
-        }
-
-        .card-desc {
-            font-size: 1.1rem;
-            line-height: 1.6;
-            color: rgba(232, 213, 181, 0.9);
-        }
-
-        /* Footer */
-        footer {
-            text-align: center;
-            padding: 4rem 0;
-            background: #100a06;
-            border-top: 1px solid #4a3b32;
-            color: #8a7a6a;
-            position: relative;
-            z-index: 10;
-        }
-
-        /* Mobile Responsive */
-        @media (max-width: 768px) {
-            .main-title {
-                font-size: 2.5rem;
-            }
-
-            .golden-line {
-                display: none;
-            }
-
-            .card,
-            .card:nth-child(even),
-            .card:nth-child(odd) {
-                flex-direction: column;
-                margin: 80px 20px;
-                text-align: center;
-            }
-
-            .year-text {
-                position: relative;
-                transform: none;
-                display: block;
-                margin-bottom: -20px;
-            }
-
-            .location-tag {
-                justify-content: center;
-            }
-        }
-    </style>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="style/custom.css">
 </head>
 
 <body>
@@ -308,15 +29,13 @@
         <div class="ingredient" data-speed="0.1"
             style="bottom: 20%; right: 20%; width: 150px; height: 150px; background: red; border-radius: 50%; filter: blur(50px);">
         </div>
-
     </div>
 
     <div class="texture-overlay"></div>
 
     <header>
         <div class="header-content">
-            <i data-lucide="chef-hat"
-                style="color: var(--gold-color); width: 48px; height: 48px; margin-bottom: 1rem;"></i>
+            <i data-lucide="chef-hat" class="icon-chef"></i>
             <h1 class="main-title">The Taste</h1>
             <p class="subtitle">Journey of The Authentic Thai Cuisine</p>
         </div>
@@ -337,7 +56,7 @@
             <div class="card-content">
                 <div class="year-text">1350</div>
                 <div class="location-tag">
-                    <i data-lucide="map-pin" style="width: 16px;"></i> Thailand (Origin)
+                    <i data-lucide="map-pin" class="icon-pin"></i> Thailand (Origin)
                 </div>
                 <h2 class="card-title">จุดเริ่มต้นความอร่อย</h2>
                 <p class="card-desc">รากเหง้าแห่งรสชาติ ต้มยำกุ้งและแกงมัสมั่น
@@ -354,7 +73,7 @@
             <div class="card-content">
                 <div class="year-text">1600</div>
                 <div class="location-tag">
-                    <i data-lucide="map-pin" style="width: 16px;"></i> Japan
+                    <i data-lucide="map-pin" class="icon-pin"></i> Japan
                 </div>
                 <h2 class="card-title">ความประณีตแห่งตะวันออก</h2>
                 <p class="card-desc">อิทธิพลการแล่เนื้อปลาและความสดใหม่ ผสานกับการจัดวางที่งดงามแบบ 'วะโชกุ'
@@ -370,7 +89,7 @@
             <div class="card-content">
                 <div class="year-text">1760</div>
                 <div class="location-tag">
-                    <i data-lucide="map-pin" style="width: 16px;"></i> China
+                    <i data-lucide="map-pin" class="icon-pin"></i> China
                 </div>
                 <h2 class="card-title">เปลวไฟแห่งมังกร</h2>
                 <p class="card-desc">เทคนิคการใช้ไฟแรง (Wok Hei) การผัด และเส้นก๋วยเตี๋ยว
@@ -387,7 +106,7 @@
             <div class="card-content">
                 <div class="year-text">2000</div>
                 <div class="location-tag">
-                    <i data-lucide="map-pin" style="width: 16px;"></i> France
+                    <i data-lucide="map-pin" class="icon-pin"></i> France
                 </div>
                 <h2 class="card-title">ศิลปะแห่งตะวันตก</h2>
                 <p class="card-desc">การยกระดับอาหารไทยสู่ Fine Dining ด้วยเทคนิคการทำซอสและการจัดจานแบบฝรั่งเศส
@@ -402,70 +121,11 @@
         <p style="margin-top: 10px; font-size: 0.8rem; opacity: 0.6;">© 2025 DESIGNED WITH PASSION</p>
     </footer>
 
+    <!-- GSAP -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
-    <script>
-        // เริ่มต้น Icons
-        lucide.createIcons();
-
-        // ลงทะเบียน Plugin ScrollTrigger
-        gsap.registerPlugin(ScrollTrigger);
-
-        // 1. Header Animation (Load ปุ๊บขึ้นปั๊บ)
-        gsap.to(".header-content", {
-            opacity: 1,
-            y: 0,
-            duration: 1.5,
-            ease: "power3.out",
-            delay: 0.2
-        });
-
-        // 2. Golden Line Animation (ยืดตามการ Scroll)
-        gsap.to(".golden-line", {
-            scaleY: 1, // ยืดจนสุด
-            ease: "none", // เส้นตรงตามการเลื่อน
-            scrollTrigger: {
-                trigger: ".timeline-container",
-                start: "top center", // เริ่มเมื่อ timeline เข้ามากลางจอ
-                end: "bottom center", // จบเมื่อ timeline หมด
-                scrub: true // ผูก animation กับ scrollbar (เลื่อนขึ้นลงเส้นก็หด/ยืด)
-            }
-        });
-
-        // 3. Card Animations (Fade In ทีละใบ)
-        const cards = document.querySelectorAll('.card');
-        cards.forEach((card) => {
-            gsap.to(card, {
-                opacity: 1,
-                y: 0,
-                duration: 1,
-                scrollTrigger: {
-                    trigger: card,
-                    start: "top 80%", // เริ่ม animate เมื่อขอบบนการ์ดถึง 80% ของจอ
-                    toggleActions: "play none none reverse" // เลื่อนลงเล่น เลื่อนกลับเล่นถอยหลัง
-                }
-            });
-        });
-
-        // 4. Parallax Ingredients Effect (ของลอยๆ)
-        const ingredients = document.querySelectorAll('.ingredient');
-        ingredients.forEach((item) => {
-            const speed = item.getAttribute('data-speed');
-            gsap.to(item, {
-                y: -200 * speed, // เคลื่อนที่ขึ้นด้านบน
-                rotation: 360,   // หมุนไปด้วย
-                ease: "none",
-                scrollTrigger: {
-                    trigger: "body",
-                    start: "top top",
-                    end: "bottom bottom",
-                    scrub: 1 // มีความหน่วงนิดๆ ให้ดูนุ่มนวล
-                }
-            });
-        });
-
-    </script>
+    <!-- Custom JS -->
+    <script src="script/main.js"></script>
 </body>
-
 </html>
