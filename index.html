@@ -12,6 +12,8 @@
         rel="stylesheet">
 
     <script src="https://unpkg.com/lucide@latest"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
 
     <!-- Custom CSS -->
     <link rel="stylesheet" href="style/custom.css">
@@ -255,6 +257,247 @@
 
         </div>
     </section>
+
+        <!-- Future Protein Section -->
+    <section class="white-section future-protein-section">
+        <div class="content-container">
+
+            <h2 class="section-title">โปรตีนแห่งอนาคต</h2>
+
+            <div class="video-wrapper">
+                <iframe 
+                    src="https://www.youtube.com/embed/dm-MP9eVv6g?si=WNs4ovUiIQJHoR-o"
+                    title="Protein Future"
+                    frameborder="0"
+                    allowfullscreen>
+                </iframe>
+            </div>
+
+            <p class="video-desc">
+                โปรตีนแห่งอนาคตเป็นหัวข้อสำคัญที่ทั่วโลกให้ความสนใจ 
+                โดยเฉพาะโปรตีนจากพืช โปรตีนสังเคราะห์ และแหล่งโปรตีนทางเลือกที่ยั่งยืน 
+                เพื่อรองรับความต้องการอาหารในอนาคตที่เพิ่มขึ้นอย่างต่อเนื่อง
+            </p>
+
+        </div>
+    </section>
+
+
+        <!-- Export Growth Section -->
+    <section class="white-section export-growth-section chart-animate">
+        <div class="content-container">
+            <h2 class="section-title">อัตราการเติบโตของตลาดการส่งออกอาหารไทย (10 ปีย้อนหลัง)</h2>
+
+            <canvas id="exportChart"></canvas>
+
+            <p class="chart-desc">
+                จากข้อมูลการส่งออกอาหารไทยในช่วง 10 ปีที่ผ่านมา 
+                จะพบว่าอุตสาหกรรมอาหารยังคงเติบโตอย่างต่อเนื่อง 
+                โดยมีปัจจัยสำคัญมาจากความนิยมอาหารไทยทั่วโลก 
+                และมาตรฐานความปลอดภัยด้านอาหารที่เป็นที่ยอมรับสากล
+            </p>
+        </div>
+    </section>
+
+
+
+    <!-- สิ่งที่โลกมองหา และ ไทยตอบได้ -->
+    <!-- ส่วนที่ 1: สิ่งที่โลกมองหา และไทยตอบได้ -->
+    <section id="global-demand" class="global-demand-section">
+    <div class="container">
+
+        <h2 class="section-title">
+            <span class="yellow-text">สิ่งที่โลกมองหา</span> <br>
+            <span class="black-text">และ ไทยตอบได้...</span>
+        </h2>
+
+
+        <p class="section-subtitle">
+        ทั่วโลกกำลังมองหาอาหารที่ดีต่อโลก 
+        <span class="red-text">ดีต่อสุขภาพ</span> 
+        และยังมีตัวตนชัดเจนในรสชาติ
+        อาหารไทย 
+        <span class="orange-text">ตอบโจทย์</span> 
+        ครบทั้ง 3 ข้อ—ทั้งวัตถุดิบท้องถิ่น สูตรดั้งเดิม และการพัฒนา
+        แพ็กเกจยั่งยืน นี่คือ 
+        <span class="green-text">“ความพอดี”</span> 
+        ที่ทำให้ไทยกลายเป็นต้นแบบของอาหารยุคใหม่
+        </p>
+
+        <div class="features-grid">
+
+        <article class="feature-card" data-animate>
+            <h3>Low Carbon Food</h3>
+            <p>วัตถุดิบท้องถิ่นใกล้แหล่งผลิต ลดการขนส่งและปล่อยก๊าซคาร์บอนต่ำ — เหมาะกับตลาดยุคใหม่ที่ใส่ใจสิ่งแวดล้อม</p>
+            <img src="assets/images/low-carbon-food.png" alt="">
+        </article>
+
+        <article class="feature-card" data-animate>
+            <h3>Authentic Taste</h3>
+            <p>สูตรดั้งเดิม + วิธีทำที่มีเอกลักษณ์เฉพาะตัว</p>
+            <img src="assets/images/authentic-taste.png" alt="">
+        </article>
+
+        <article class="feature-card" data-animate>
+            <h3>Sustainable Packaging</h3>
+            <p>บรรจุภัณฑ์ที่ย่อยสลายได้ + งานออกแบบใหม่</p>
+            <img src="assets/images/sustainable-packaging.png" alt="">
+        </article>
+
+        </div>
+
+    </div>
+    </section>
+
+
+
+    <!-- คุณเป็นสายอาหารแบบไหน? -->
+    <!-- =========================
+     SECTION 2 : สายอาหาร
+========================= -->
+<!-- SECTION 2 : สายอาหาร -->
+    <section id="foodTypeSelect" class="foodtype-section">
+        <div class="container">
+
+            <h2 class="foodtype-title">
+                คุณเป็นสายอาหาร <span class="highlight-yellow">แบบไหน?</span>
+            </h2>
+
+            <p class="foodtype-subtitle">
+                เลือกสไตล์การกินที่ตรงกับคุณที่สุด
+            </p>
+
+            <div class="foodtype-grid">
+
+                <div class="foodtype-card" onclick="showFoodTypeDetail('spicy')">
+                    <h3>สายจัด<span class="red">จ้าน</span></h3>
+                </div>
+
+                <div class="foodtype-card" onclick="showFoodTypeDetail('soft')">
+                    <h3>สายนุ่ม<span class="yellow-text">ละมุน</span></h3>
+                </div>
+
+                <div class="foodtype-card" onclick="showFoodTypeDetail('healthy')">
+                    <h3>สาย<span class="green">สุขภาพ</span></h3>
+                </div>
+
+                <div class="foodtype-card" onclick="showFoodTypeDetail('modern')">
+                    <h3>สายทัน<span class="purple">สมัย</span></h3>
+                </div>
+
+            </div>
+
+        </div>
+    </section>
+
+    <!-- หน้ารายละเอียด -->
+    <section id="foodTypeDetail" class="foodtype-section hidden">
+        <div class="container" style="text-align:center;">
+
+            <h2 id="foodTypeTitle" class="foodtype-title"></h2>
+
+            <img id="foodTypeImg" class="detail-img" src="" alt="" style="display:none;">
+
+            <p id="foodTypeDesc" class="foodtype-subtitle" style="max-width:600px; margin:auto;"></p>
+
+            <div id="foodDetailContainer" class="detail-container"></div>
+
+            <button class="back-btn" onclick="backToFoodType()">ย้อนกลับ</button>
+        </div>
+    </section>
+
+
+
+    <!-- อาหารไทยจานโปรดคุณคืออะไร -->
+    <!-- =========================
+     SECTION 3 : อาหารไทยจานโปรด
+========================= -->
+    <section id="favfood-section" class="white-section">
+        <h2 class="section-title">อาหารไทยจานโปรดคุณคืออะไร?</h2>
+        
+
+        <!-- หน้าเลือกเมนู -->
+        <div id="favFoodSelect" class="favfood-select">
+
+            <div class="menu-card" onclick="showFoodDetail('tomyum')">
+                <img src="assets\images\favfooddetail\ต้มยำกุ้ง_จานโปรด.png" alt="">
+                
+                <h3>ต้มยำกุ้ง</h3>
+            </div>
+
+            <div class="menu-card" onclick="showFoodDetail('padthai')">
+                <img src="assets\images\favfooddetail\ผัดไทย_จานโปรด.png" alt="">
+                <h3>ผัดไทย</h3>
+            </div>
+
+            <div class="menu-card" onclick="showFoodDetail('greencurry')">
+                <img src="assets\images\favfooddetail\แกงเขียวหวาน_จานโปรด.png" alt="">
+                <h3>แกงเขียวหวาน</h3>
+            </div>
+
+            <div class="menu-card" onclick="showFoodDetail('taipla')">
+                <img src="assets\images\favfooddetail\แกงไตปลา_จานโปรด.png" alt="">
+                <h3>แกงไตปลา</h3>
+            </div>
+
+            <div class="menu-card" onclick="showFoodDetail('stickyrice')">
+                <img src="assets\images\favfooddetail\ข้าวเหนียวมะม่วง_จานโปรด.png" alt="">
+                <h3>ข้าวเหนียวมะม่วง</h3>
+            </div>
+
+            <div class="menu-card" onclick="showFoodDetail('redcurry')">
+                <img src="assets\images\favfooddetail\แกงมัสมั่นไก่_จานโปรด.png" alt="">
+                <h3>แกงมัสมั่น</h3>
+            </div>
+
+            <div class="menu-card" onclick="showFoodDetail('tomkakai')">
+                <img src="assets\images\favfooddetail\ต้มข่าไก่_จานโปรด.png" alt="">
+                <h3>ต้มข่าไก่</h3>
+            </div>
+
+            <div class="menu-card" onclick="showFoodDetail('kaosoi')">
+                <img src="assets\images\favfooddetail\ข้าวซอย_จานโปรด.png" alt="">
+                <h3>ข้าวซอย</h3>
+            </div>
+
+        </div>
+
+                <!-- หน้ารายละเอียดเมนู -->
+        <!-- หน้ารายละเอียดเมนู -->
+        <div id="favFoodDetail" class="favfood-detail hidden">
+
+
+        <h2 id="foodTitle"></h2>
+        <img id="foodImg" class="detail-img" />
+
+
+        <!-- กล่องข้อมูลซ้าย-ขวาแบบรูป Canva -->
+        <div class="food-detail-grid">
+        <div class="left-box">
+        <h3>ประวัติโดยย่อ</h3>
+        <p id="foodHistory" class="detail-text"></p>
+        </div>
+
+
+        <div class="right-box">
+        <h3>วัตถุดิบหลัก</h3>
+        <ul id="foodIngredients" class="detail-list"></ul>
+        </div>
+        </div>
+
+
+        <button class="back-btn" onclick="backToMenu()">ลองเปลี่ยนเมนูดูไหม</button>
+        </div>
+        </section>
+
+    
+
+
+
+
+
+
+
 
 
 
