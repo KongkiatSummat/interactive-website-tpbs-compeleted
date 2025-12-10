@@ -3,6 +3,15 @@
     --gold-color: #cfa166;
     --text-color: #e8d5b5;
     --card-bg: rgba(42, 27, 18, 0.8);
+    --bg: #ffffff;
+    --text: #111;
+    --muted: #444;
+
+
+    --modern: linear-gradient(90deg,#FF5F8A 0%,#A734C7 100%);
+    --health: #53C235;
+    --soft: #F59E53;
+    --spicy: #FF3B30;
 }
 
 * {
@@ -547,7 +556,7 @@ header {
 /* --- subtitle --- */
 .foodtype-subtitle {
     text-align: center;
-    font-size: 18px;
+    font-size: 30px;
     margin-top: 0;
     margin-bottom: 45px;
     color: #000;
@@ -587,6 +596,15 @@ header {
     color: #000;
     line-height: 1.2;
 }
+
+.detail-box h3 {
+    font-size: 30px;
+}
+
+.detail-box p {
+    font-size: 30x;
+}
+
 
 
 /* --- colors --- */
@@ -654,12 +672,16 @@ header {
 
 .favfood-select {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  grid-template-columns: repeat(3, max-content);
+  justify-content: center;   /* จัดทั้งกริดไปกลาง */
   gap: 30px;
   margin-top: 40px;
 }
 
+
+
 .menu-card {
+  width: 220px;   /* ขนาดการ์ดล็อก */
   background: #fff;
   padding: 20px;
   border-radius: 16px;
@@ -668,6 +690,7 @@ header {
   transition: 0.35s;
   text-align: center;
 }
+
 
 .menu-card:hover {
   transform: translateY(-8px);
