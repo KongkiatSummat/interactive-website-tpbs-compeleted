@@ -1,86 +1,356 @@
-// เริ่มต้น Icons
-lucide.createIcons();
 
-// ลงทะเบียน Plugin ScrollTrigger
+
+/* ======================================================
+   ICONS & GSAP SETUP
+====================================================== */
+lucide.createIcons();
 gsap.registerPlugin(ScrollTrigger);
 
-// 1. Header Animation (Load ปุ๊บขึ้นปั๊บ)
+/* ======================================================
+   HERO HEADER FADE-IN
+====================================================== */
 gsap.to(".header-content", {
+  opacity: 1,
+  y: 0,
+  duration: 1.5,
+  ease: "power3.out",
+  delay: 0.2
+});
+
+/* ======================================================
+   GOLDEN TIMELINE LINE
+====================================================== */
+gsap.to(".golden-line", {
+  scaleY: 1,
+  ease: "none",
+  scrollTrigger: {
+    trigger: ".timeline-container",
+    start: "top center",
+    end: "bottom center",
+    scrub: true
+  }
+});
+
+/* ======================================================
+   TIMELINE CARDS FADE UP
+====================================================== */
+document.querySelectorAll('.card').forEach(card => {
+  gsap.to(card, {
     opacity: 1,
     y: 0,
-    duration: 1.5,
-    ease: "power3.out",
-    delay: 0.2
+    duration: 1,
+    scrollTrigger: {
+      trigger: card,
+      start: "top 80%",
+      toggleActions: "play none none reverse"
+    }
+  });
 });
 
-// 2. Golden Line Animation (ยืดตามการ Scroll)
-gsap.to(".golden-line", {
-    scaleY: 1,
+/* ======================================================
+   PARALLAX INGREDIENT BLOBS
+====================================================== */
+document.querySelectorAll('.ingredient').forEach(item => {
+  const speed = item.getAttribute('data-speed');
+  gsap.to(item, {
+    y: -300 * speed,
+    rotation: 360,
     ease: "none",
     scrollTrigger: {
-        trigger: ".timeline-container",
-        start: "top center",
-        end: "bottom center",
-        scrub: true
+      trigger: "body",
+      start: "top top",
+      end: "bottom bottom",
+      scrub: 1
     }
+  });
 });
 
-// 3. Card Animations (Fade In ทีละใบ)
-const cards = document.querySelectorAll('.card');
-cards.forEach((card) => {
-    gsap.to(card, {
-        opacity: 1,
-        y: 0,
-        duration: 1,
-        scrollTrigger: {
-            trigger: card,
-            start: "top 80%",
-            toggleActions: "play none none reverse"
-        }
-    });
+/* ======================================================
+   MAP JOURNEY CONFIG
+====================================================== */
+const locations = {
+  intro: { scale: 1.5, x: 55, y: 45 },
+  jp: { scale: 2.2, x: 70.1, y: 33.5 },
+  cn: { scale: 2.2, x: 65.7, y: 31.0 },
+  au: { scale: 2.2, x: 75.7, y: 71.0 },
+  fr: { scale: 2.2, x: 60.2, y: 30.0 },
+  us: { scale: 2.2, x: 35.9, y: 33.0 },
+  overview: { scale: 1.5, x: 55, y: 45 }
+};
+
+function calculateTransform(loc) {
+  return {
+    scale: loc.scale,
+    xPercent: (50 - loc.x) * loc.scale,
+    yPercent: (50 - loc.y) * loc.scale
+  };
+}
+
+/* ======================================================
+   MAP INITIAL POSITION
+====================================================== */
+const initialPos = calculateTransform(locations.intro);
+gsap.set(".map-inner", {
+  scale: initialPos.scale,
+  xPercent: initialPos.xPercent,
+  yPercent: initialPos.yPercent
 });
 
-// 4. Parallax Ingredients Effect (ของลอยๆ)
-const ingredients = document.querySelectorAll('.ingredient');
-ingredients.forEach((item) => {
-    const speed = item.getAttribute('data-speed');
-    gsap.to(item, {
-        y: -200 * speed,
-        rotation: 360,
-        ease: "none",
-        scrollTrigger: {
-            trigger: "body",
-            start: "top top",
-            end: "bottom bottom",
-            scrub: 1
-        }
-    });
-});const reveals = document.querySelectorAll(".reveal");
+/* ======================================================
+   ROUTE PATH DRAWING
+====================================================== */
+document.querySelectorAll('.route-path').forEach(path => {
+  const len = path.getTotalLength();
+  gsap.set(path, {
+    strokeDasharray: len,
+    strokeDashoffset: len
+  });
+});
 
-function revealOnScroll() {
-  reveals.forEach((el) => {
-    const rect = el.getBoundingClientRect();
-    if (rect.top < window.innerHeight - 150) {
-      el.classList.add("active");
+/* ======================================================
+   MAP SCENE CREATOR
+====================================================== */
+function createScene(targetId, locKey, pathId, flagId) {
+  const targetPos = calculateTransform(locations[locKey]);
+
+  let tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: targetId,
+      start: "top bottom",
+      end: "center center",
+      scrub: 1
+    }
+  });
+
+  tl.to(".map-inner", {
+    scale: targetPos.scale,
+    xPercent: targetPos.xPercent,
+    yPercent: targetPos.yPercent,
+    ease: "power1.inOut",
+    duration: 1
+  });
+
+  if (pathId) {
+    tl.to(pathId, {
+      strokeDashoffset: 0,
+      ease: "power1.out",
+      duration: 0.6
+    }, "<");
+  }
+
+  ScrollTrigger.create({
+    trigger: targetId,
+    start: "top center",
+    end: "bottom center",
+
+    onEnter: () => {
+      if (!flagId) return;
+      const flagEl = document.querySelector(flagId);
+      flagEl.innerText = flagEl.dataset.flag;
+      gsap.to(flagId, {
+        scale: 1,
+        duration: 0.6,
+        ease: "elastic.out(1, 0.5)"
+      });
+    },
+
+    onLeave: () => {
+      if (!flagId) return;
+      const flagEl = document.querySelector(flagId);
+      gsap.to(flagId, {
+        scale: 0,
+        duration: 0.1,
+        onComplete: () => {
+          flagEl.innerHTML =
+            '<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a9/Flag_of_Thailand.svg/100px-Flag_of_Thailand.svg.png" style="width:40px;border-radius:4px;box-shadow:0 2px 4px rgba(0,0,0,0.5);">';
+          gsap.to(flagId, { scale: 1, duration: 0.1 });
+        }
+      });
+    },
+
+    onEnterBack: () => {
+      if (!flagId) return;
+      const flagEl = document.querySelector(flagId);
+      gsap.to(flagId, {
+        scale: 0,
+        duration: 0.2,
+        onComplete: () => {
+          flagEl.innerText = flagEl.dataset.flag;
+          gsap.to(flagId, { scale: 1, duration: 0.3 });
+        }
+      });
+    },
+
+    onLeaveBack: () => {
+      if (flagId) gsap.to(flagId, { scale: 0, duration: 0.3 });
     }
   });
 }
 
-window.addEventListener("scroll", revealOnScroll);
+/* ======================================================
+   CREATE MAP SCENES
+====================================================== */
+createScene("#sec-jp", "jp", "#path-jp", "#flag-jp");
+createScene("#sec-cn", "cn", "#path-cn", "#flag-cn");
+createScene("#sec-au", "au", "#path-au", "#flag-au");
+createScene("#sec-fr", "fr", "#path-fr", "#flag-fr");
+createScene("#sec-us", "us", "#path-us", "#flag-us");
 
-revealOnScroll();
+/* ======================================================
+   MAP OVERVIEW
+====================================================== */
+const overviewPos = calculateTransform(locations.overview);
 
-
-// ------------------------------
-// Video Animation Trigger
-// ------------------------------
-const videoSection = document.querySelector(".video-animate");
-
-window.addEventListener("scroll", () => {
-    if (videoSection && isInViewport(videoSection)) {
-        videoSection.classList.add("active");
-    }
+gsap.to(".map-inner", {
+  scale: overviewPos.scale,
+  xPercent: overviewPos.xPercent,
+  yPercent: overviewPos.yPercent,
+  ease: "power1.inOut",
+  scrollTrigger: {
+    trigger: "#sec-outro",
+    start: "top 85%",
+    end: "center center",
+    scrub: 1.5
+  }
 });
+
+/* ======================================================
+   CONTENT CARD FADE
+====================================================== */
+document.querySelectorAll('.content-card').forEach(card => {
+  gsap.to(card, {
+    opacity: 1,
+    y: 0,
+    duration: 0.8,
+    ease: "power2.out",
+    scrollTrigger: {
+      trigger: card,
+      start: "top 45%",
+      end: "bottom top",
+      toggleActions: "play reverse play reverse"
+    }
+  });
+});
+
+/* ======================================================
+   MAP / PARALLAX VISIBILITY CONTROL
+====================================================== */
+const mapLayers = gsap.utils.toArray([
+  ".map-fixed-container",
+  ".map-texture-overlay",
+  ".map-vignette-overlay"
+]);
+
+const parallax = document.querySelector(".parallax-container");
+
+gsap.set(mapLayers, { opacity: 0, pointerEvents: "none" });
+
+ScrollTrigger.create({
+  trigger: "#sec-intro",
+  start: "top center",
+  end: "top top",
+
+  onEnter: () => {
+    mapLayers.forEach(el => el.style.pointerEvents = "auto");
+    gsap.to(mapLayers, { opacity: 1, duration: 0.5 });
+    gsap.to(parallax, { opacity: 0, duration: 0.5 });
+  },
+
+  onLeaveBack: () => {
+    gsap.to(mapLayers, {
+      opacity: 0,
+      duration: 0.5,
+      onComplete: () => {
+        mapLayers.forEach(el => el.style.pointerEvents = "none");
+      }
+    });
+    gsap.to(parallax, { opacity: 1, duration: 0.5 });
+  }
+});
+
+/* ======================================================
+   REVEAL SECTIONS
+====================================================== */
+const revealEls = document.querySelectorAll('.reveal');
+
+const revealObserver = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.2 });
+
+revealEls.forEach(el => revealObserver.observe(el));
+
+/* ======================================================
+   BAR CHART ANIMATION
+====================================================== */
+const chartInner = document.getElementById('chart-inner');
+const barEls = document.querySelectorAll('.bar');
+
+if (chartInner) {
+  const chartObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        barEls.forEach(bar => {
+          const h = bar.dataset.height;
+          if (h) bar.style.height = h + 'px';
+        });
+        chartObserver.unobserve(chartInner);
+      }
+    });
+  }, { threshold: 0.5 });
+
+  chartObserver.observe(chartInner);
+}
+
+/* ======================================================
+   DONUT SPIN
+====================================================== */
+const exportSection = document.querySelector('.export-section');
+const donuts = document.querySelectorAll('.donut');
+
+if (exportSection && donuts.length) {
+  const donutObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        donuts.forEach(d => d.classList.add('spin'));
+        donutObserver.unobserve(exportSection);
+      }
+    });
+  }, { threshold: 0.4 });
+
+  donutObserver.observe(exportSection);
+}
+
+/* ======================================================
+   TOOLTIP
+====================================================== */
+const tooltip = document.getElementById('tooltip');
+
+function attachTooltip(selectors) {
+  document.querySelectorAll(selectors).forEach(el => {
+    const text = el.dataset.tooltip;
+    if (!text) return;
+
+    el.addEventListener('mousemove', e => {
+      tooltip.textContent = text;
+      tooltip.style.left = e.clientX + 12 + 'px';
+      tooltip.style.top = e.clientY + 12 + 'px';
+      tooltip.classList.add('visible');
+    });
+
+    el.addEventListener('mouseleave', () => {
+      tooltip.classList.remove('visible');
+    });
+  });
+}
+
+attachTooltip('.bar-group');
+attachTooltip('.donut-card');
+
 
 
 
@@ -188,6 +458,21 @@ window.addEventListener("scroll", () => {
         exportChart.data.datasets[0].data = exportValues.slice();
         exportChart.update();
     }
+});
+
+ScrollTrigger.create({
+  trigger: "#foodtype",
+  start: "top bottom",
+  onEnter: () =>
+    gsap.to(".map-fixed-container", {
+      opacity: 0,
+      pointerEvents: "none"
+    }),
+  onLeaveBack: () =>
+    gsap.to(".map-fixed-container", {
+      opacity: 1,
+      pointerEvents: "auto"
+    })
 });
 
 
